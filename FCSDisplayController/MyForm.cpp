@@ -1,15 +1,5 @@
 #include "MyForm.h"
 
-#include "tchar.h"
-#include "Windows.h"
-#include <ctime>
-#include <string>
-#using <System.dll>
-
-using namespace System;
-using namespace System::Windows::Forms;
-using namespace System::IO::Ports;
-using namespace System::ComponentModel;
 
 BOOL CALLBACK on_enumchildwindow_cb(HWND hwndWindow, LPARAM lParam) {
 	TCHAR wsTitle[2048];
@@ -275,44 +265,135 @@ DWORD WINAPI ReadFCS(LPVOID lpParam)
 	}
 }
 
+BOOL sendcommand(String^ msg, SerialPort^ out){
+	String^ resp = gcnew String("");
+	try{
+		out->Write(msg);
+		//resp = out->ReadTo(";");
+	}
+	catch (TimeoutException^ ex)
+	{
+		Debug::WriteLine(ex->Message);
+	}
+	if (resp->Equals("r")){
+		return true;
+	} else {
+		return false;
+	}
+}
+
 DWORD WINAPI SendSerial(LPVOID lpParam)
 {
 	array<String^>^ serialPorts = nullptr;
 	while (true){
-		try
-		{
-			// Get a list of serial port names.
-			serialPorts = SerialPort::GetPortNames();
-		}
-		catch (Win32Exception^ ex)
-		{
-			Console::WriteLine(ex->Message);
-		}
-
-		// Display each port name to the console. 
-		for each(String^ port in serialPorts)
-		{
-			SerialPort^ pingPort = gcnew SerialPort(port);
-			pingPort->BaudRate = 9600;
-			pingPort->ReadTimeout = 500;
-			String^ pingResp = gcnew String("");
-			try {
-				pingPort->Open();
-				pingPort->Write("p;");
-				pingResp = pingPort->ReadTo(";");
-				pingPort->Close();
+		if (SerialPortData::search){
+			try
+			{
+				// Get a list of serial port names.
+				serialPorts = SerialPort::GetPortNames();
 			}
-			catch (TimeoutException^ ex)
+			catch (Win32Exception^ ex)
 			{
 				Console::WriteLine(ex->Message);
 			}
-			catch (UnauthorizedAccessException^ ex)
-			{
-				Console::WriteLine(ex->Message);
-			}
-			Console::WriteLine(pingResp);
 
-			Sleep(20);
+			// Display each port name to the console. 
+			for (int i = 0; i < serialPorts->Length; i++)
+			{
+				String^ port = serialPorts[i];
+				SerialPort^ pingPort = gcnew SerialPort(port);
+				pingPort->BaudRate = 9600;
+				pingPort->ReadTimeout = 1000;
+				String^ pingResp = gcnew String("");
+				try {
+					pingPort->Open();
+					pingPort->Write("p;");
+					pingResp = pingPort->ReadTo(";");
+				}
+				catch (TimeoutException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+				}
+				catch (UnauthorizedAccessException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+				}
+				catch (System::IO::IOException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+				}
+				try{
+					pingPort->Close();
+				}
+				catch (TimeoutException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+				}
+				catch (System::IO::IOException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+				}
+				if (!pingResp->Equals("ardFCSv1")){
+					serialPorts[i] = nullptr;
+				}
+			}
+			AcquireSRWLockExclusive(&comLock);
+			SerialPortData::serialPorts->Clear();
+			for each (String^ portname in serialPorts){
+				if (portname != nullptr) {
+					SerialPortData::serialPorts->Add(portname);
+				}
+			}
+			ReleaseSRWLockExclusive(&comLock);
+			Sleep(50);
+		} else {
+			SerialPort^ dispPort = gcnew SerialPort(SerialPortData::chosenPort);
+			dispPort->BaudRate = 9600;
+			dispPort->ReadTimeout = 1000;
+			while (!SerialPortData::search){
+				try {
+					dispPort->Open();
+					sendcommand(output.dispEnabled ? "e;" : "d;", dispPort);
+					sendcommand(String::Format("b{0};", output.brightness), dispPort);
+					if (_tcscmp(output.blueDisp1, output.redDisp2) == 0 && _tcscmp(output.blueDisp1, output.blueDisp2) == 0 && _tcscmp(output.redDisp1, output.redDisp2) == 0) {
+						_TCHAR out[7];
+						_tcscpy_s(out, output.blueDisp1);
+						if (out[2] == ':'){
+							sendcommand("ca1;",dispPort);
+							out[2] = out[3];
+							out[3] = out[4];
+							out[4] = out[5];
+						} else {
+							sendcommand("ca0;", dispPort);
+						}
+						sendcommand(String::Format("wa{0,4};", gcnew String(out)), dispPort);
+					} else {
+						sendcommand("ca0;", dispPort);
+						sendcommand(String::Format("wo{1},{0,4};", gcnew String(output.redDisp1), output.rd1), dispPort);
+						sendcommand(String::Format("wo{1},{0,4};", gcnew String(output.redDisp2), output.rd2), dispPort);
+						sendcommand(String::Format("wo{1},{0,4};", gcnew String(output.blueDisp1), output.bd1), dispPort);
+						sendcommand(String::Format("wo{1},{0,4};", gcnew String(output.blueDisp2), output.bd2), dispPort);
+					}
+				}
+				catch (UnauthorizedAccessException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+				}
+				catch (System::IO::IOException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+					SerialPortData::search = true;
+				}
+				try{
+					dispPort->Close();
+				}
+				catch (System::IO::IOException^ ex)
+				{
+					Debug::WriteLine(ex->Message);
+					SerialPortData::search = true;
+				}
+				Sleep(50);
+			}
 		}
 	}
 }
@@ -321,6 +402,7 @@ DWORD WINAPI SendSerial(LPVOID lpParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
+
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
 

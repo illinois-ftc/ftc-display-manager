@@ -1,42 +1,6 @@
 #pragma once
 #include "Windows.h"
-
-typedef enum {
-	INIT,
-	PRE_AUTO,
-	AUTO,
-	PRE_TELE,
-	TELE
-} modes;
-
-typedef struct {
-	HWND redTeam1;
-	HWND redTeam2;
-	HWND blueTeam1;
-	HWND blueTeam2;
-	HWND currMode;
-	HWND timing;
-} samoWindow;
-
-typedef struct {
-	TCHAR redDisp1[2048];
-	TCHAR redDisp2[2048];
-	TCHAR blueDisp1[2048];
-	TCHAR blueDisp2[2048];
-	BOOL FCSConnected;
-	BOOL enabled;
-} outputContent;
-
-long autoTime = 30;
-long teleTime = 120;
-
-TCHAR prev_item[2048];
-HWND samo = NULL;
-modes mode = INIT;
-outputContent output;
-samoWindow window;
-
-SRWLOCK dispLock;
+#include "FCSHeader.h"
 
 namespace FCSDisplayController {
 
@@ -54,7 +18,7 @@ namespace FCSDisplayController {
 	{
 
 
-	
+
 
 	public:
 		MyForm(void)
@@ -76,7 +40,9 @@ namespace FCSDisplayController {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Button^  button1;
+	private: System::Windows::Forms::Button^  ardConnButton;
+	protected:
+
 
 	private: System::Windows::Forms::TextBox^  red1Out;
 	private: System::Windows::Forms::TextBox^  red2Out;
@@ -106,6 +72,15 @@ namespace FCSDisplayController {
 	public: System::Windows::Forms::Timer^  timer1;
 	private: System::Windows::Forms::TextBox^  fcsStatus;
 	private: System::Windows::Forms::Button^  dispConnBtn;
+	private: System::Windows::Forms::ComboBox^  portSelector;
+	private: System::Windows::Forms::Label^  label6;
+	private: System::Windows::Forms::TextBox^  dispStatus;
+
+	private: System::Windows::Forms::CheckBox^  checkBox1;
+
+
+
+
 
 	public:
 	private:
@@ -128,7 +103,8 @@ namespace FCSDisplayController {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			this->button1 = (gcnew System::Windows::Forms::Button());
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
+			this->ardConnButton = (gcnew System::Windows::Forms::Button());
 			this->red1Out = (gcnew System::Windows::Forms::TextBox());
 			this->red2Out = (gcnew System::Windows::Forms::TextBox());
 			this->blue1Out = (gcnew System::Windows::Forms::TextBox());
@@ -148,19 +124,23 @@ namespace FCSDisplayController {
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->fcsStatus = (gcnew System::Windows::Forms::TextBox());
 			this->dispConnBtn = (gcnew System::Windows::Forms::Button());
+			this->portSelector = (gcnew System::Windows::Forms::ComboBox());
+			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->dispStatus = (gcnew System::Windows::Forms::TextBox());
+			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
 			this->tableLayoutPanel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->brightnessSlider))->BeginInit();
 			this->SuspendLayout();
 			// 
-			// button1
+			// ardConnButton
 			// 
-			this->button1->Location = System::Drawing::Point(235, 198);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(155, 23);
-			this->button1->TabIndex = 0;
-			this->button1->Text = L"Connect to displays";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+			this->ardConnButton->Location = System::Drawing::Point(260, 62);
+			this->ardConnButton->Name = L"ardConnButton";
+			this->ardConnButton->Size = System::Drawing::Size(155, 23);
+			this->ardConnButton->TabIndex = 0;
+			this->ardConnButton->Text = L"Connect to displays";
+			this->ardConnButton->UseVisualStyleBackColor = true;
+			this->ardConnButton->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
 			// red1Out
 			// 
@@ -305,7 +285,7 @@ namespace FCSDisplayController {
 			this->tableLayoutPanel1->Controls->Add(this->red1Disp, 0, 2);
 			this->tableLayoutPanel1->Controls->Add(this->red1Out, 0, 1);
 			this->tableLayoutPanel1->Controls->Add(this->red2Out, 1, 1);
-			this->tableLayoutPanel1->Location = System::Drawing::Point(90, 12);
+			this->tableLayoutPanel1->Location = System::Drawing::Point(12, 35);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 3;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
@@ -317,17 +297,17 @@ namespace FCSDisplayController {
 			// brightnessSlider
 			// 
 			this->brightnessSlider->LargeChange = 4;
-			this->brightnessSlider->Location = System::Drawing::Point(90, 86);
+			this->brightnessSlider->Location = System::Drawing::Point(12, 109);
 			this->brightnessSlider->Maximum = 15;
 			this->brightnessSlider->Name = L"brightnessSlider";
-			this->brightnessSlider->Size = System::Drawing::Size(192, 45);
+			this->brightnessSlider->Size = System::Drawing::Size(226, 45);
 			this->brightnessSlider->TabIndex = 16;
 			this->brightnessSlider->Scroll += gcnew System::EventHandler(this, &MyForm::brightnessSlider_Scroll);
 			// 
 			// label5
 			// 
 			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(149, 118);
+			this->label5->Location = System::Drawing::Point(79, 141);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(59, 13);
 			this->label5->TabIndex = 17;
@@ -337,7 +317,7 @@ namespace FCSDisplayController {
 			// brightnessLabel
 			// 
 			this->brightnessLabel->AutoSize = true;
-			this->brightnessLabel->Location = System::Drawing::Point(217, 118);
+			this->brightnessLabel->Location = System::Drawing::Point(147, 141);
 			this->brightnessLabel->MinimumSize = System::Drawing::Size(13, 13);
 			this->brightnessLabel->Name = L"brightnessLabel";
 			this->brightnessLabel->Size = System::Drawing::Size(21, 13);
@@ -353,16 +333,17 @@ namespace FCSDisplayController {
 			// fcsStatus
 			// 
 			this->fcsStatus->BackColor = System::Drawing::Color::DarkSalmon;
-			this->fcsStatus->Location = System::Drawing::Point(12, 229);
+			this->fcsStatus->Location = System::Drawing::Point(260, 146);
 			this->fcsStatus->Name = L"fcsStatus";
 			this->fcsStatus->ReadOnly = true;
-			this->fcsStatus->Size = System::Drawing::Size(100, 20);
+			this->fcsStatus->Size = System::Drawing::Size(155, 20);
 			this->fcsStatus->TabIndex = 19;
 			this->fcsStatus->Text = L"FCS Not Connected";
+			this->fcsStatus->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			// 
 			// dispConnBtn
 			// 
-			this->dispConnBtn->Location = System::Drawing::Point(12, 198);
+			this->dispConnBtn->Location = System::Drawing::Point(260, 117);
 			this->dispConnBtn->Name = L"dispConnBtn";
 			this->dispConnBtn->Size = System::Drawing::Size(155, 23);
 			this->dispConnBtn->TabIndex = 20;
@@ -370,20 +351,72 @@ namespace FCSDisplayController {
 			this->dispConnBtn->UseVisualStyleBackColor = true;
 			this->dispConnBtn->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
+			// portSelector
+			// 
+			this->portSelector->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->portSelector->FormattingEnabled = true;
+			this->portSelector->Location = System::Drawing::Point(299, 35);
+			this->portSelector->Name = L"portSelector";
+			this->portSelector->Size = System::Drawing::Size(71, 21);
+			this->portSelector->TabIndex = 21;
+			this->portSelector->DropDown += gcnew System::EventHandler(this, &MyForm::comboBox1_DropDown);
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->Location = System::Drawing::Point(257, 16);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(146, 13);
+			this->label6->TabIndex = 22;
+			this->label6->Text = L"Dectected display controllers:";
+			// 
+			// dispStatus
+			// 
+			this->dispStatus->BackColor = System::Drawing::Color::DarkSalmon;
+			this->dispStatus->Location = System::Drawing::Point(260, 91);
+			this->dispStatus->Name = L"dispStatus";
+			this->dispStatus->ReadOnly = true;
+			this->dispStatus->Size = System::Drawing::Size(155, 20);
+			this->dispStatus->TabIndex = 23;
+			this->dispStatus->Text = L"Displays Not Connected";
+			this->dispStatus->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			// 
+			// checkBox1
+			// 
+			this->checkBox1->AutoSize = true;
+			this->checkBox1->Checked = true;
+			this->checkBox1->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->checkBox1->Location = System::Drawing::Point(76, 12);
+			this->checkBox1->Name = L"checkBox1";
+			this->checkBox1->Size = System::Drawing::Size(98, 17);
+			this->checkBox1->TabIndex = 24;
+			this->checkBox1->Text = L"Displays Active";
+			this->checkBox1->UseVisualStyleBackColor = true;
+			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &MyForm::checkBox1_CheckedChanged);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(392, 261);
+			this->AutoSize = true;
+			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->ClientSize = System::Drawing::Size(423, 177);
+			this->Controls->Add(this->checkBox1);
+			this->Controls->Add(this->dispStatus);
+			this->Controls->Add(this->label6);
+			this->Controls->Add(this->portSelector);
 			this->Controls->Add(this->dispConnBtn);
 			this->Controls->Add(this->fcsStatus);
 			this->Controls->Add(this->brightnessLabel);
 			this->Controls->Add(this->label5);
 			this->Controls->Add(this->brightnessSlider);
 			this->Controls->Add(this->tableLayoutPanel1);
-			this->Controls->Add(this->button1);
+			this->Controls->Add(this->ardConnButton);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+			this->MaximizeBox = false;
 			this->Name = L"MyForm";
-			this->Text = L"FCS Display communicator";
+			this->Text = L"FCS Display Manager";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->tableLayoutPanel1->ResumeLayout(false);
 			this->tableLayoutPanel1->PerformLayout();
@@ -394,6 +427,29 @@ namespace FCSDisplayController {
 		}
 #pragma endregion
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+		if (this->portSelector->SelectedIndex != -1){
+			SerialPortData::search = !SerialPortData::search;
+		}
+		if (!SerialPortData::search){
+			SerialPortData::chosenPort = (String^)(this->portSelector->SelectedItem);
+			output.rd1 = ((String^)(this->red1Disp->SelectedItem))[1] - '0';
+			output.rd2 = ((String^)(this->red2Disp->SelectedItem))[1] - '0';
+			output.bd1 = ((String^)(this->blue1Disp->SelectedItem))[1] - '0';
+			output.bd2 = ((String^)(this->blue2Disp->SelectedItem))[1] - '0';
+			portSelector->Enabled = false;
+			this->red1Disp->Enabled = false;
+			this->red2Disp->Enabled = false;
+			this->blue1Disp->Enabled = false;
+			this->blue2Disp->Enabled = false;
+			this->ardConnButton->Text = "Disconnect from displays";
+		} else {
+			this->portSelector->Enabled = true;
+			this->red1Disp->Enabled = true;
+			this->red2Disp->Enabled = true;
+			this->blue1Disp->Enabled = true;
+			this->blue2Disp->Enabled = true;
+			this->ardConnButton->Text = "Connect to displays";
+		}
 
 	}
 
@@ -403,10 +459,17 @@ namespace FCSDisplayController {
 	}
 	private: System::Void brightnessSlider_Scroll(System::Object^  sender, System::EventArgs^  e) {
 		this->brightnessLabel->Text = String::Format("{0:P0}", ((float)this->brightnessSlider->Value / this->brightnessSlider->Maximum));
+		AcquireSRWLockExclusive(&dispLock);
+		output.brightness = this->brightnessSlider->Value;
+		ReleaseSRWLockExclusive(&dispLock);
 	}
 	private: System::Void label6_Click(System::Object^  sender, System::EventArgs^  e) {
 	}
-	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) {		
+	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) {
+		this->red1Disp->SelectedIndex = 0;
+		this->red2Disp->SelectedIndex = 1;
+		this->blue1Disp->SelectedIndex = 2;
+		this->blue2Disp->SelectedIndex = 3;
 	}
 
 	private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
@@ -418,19 +481,50 @@ namespace FCSDisplayController {
 		if (output.FCSConnected){
 			this->fcsStatus->Text = "FCS Connected";
 			this->fcsStatus->BackColor = Color::YellowGreen;
+			this->dispConnBtn->Text = "Disconnect from FCS";
 		} else {
 			this->fcsStatus->Text = "FCS Not Connected";
 			this->fcsStatus->BackColor = Color::DarkSalmon;
+			this->dispConnBtn->Text = "Connect to FCS";
 		}
 		ReleaseSRWLockShared(&dispLock);
+		if (!SerialPortData::search) {
+			this->dispStatus->Text = "Displays Connected";
+			this->dispStatus->BackColor = Color::YellowGreen;
+		} else {
+			if (!this->portSelector->Enabled){
+				this->portSelector->Enabled = true;
+				this->ardConnButton->Text = "Connect to displays";
+				this->portSelector->SelectedIndex = -1;
+			}
+			this->dispStatus->Text = "Displays Not Connected";
+			this->dispStatus->BackColor = Color::DarkSalmon;
+		}
+
 	}
-private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
-	output.enabled = !output.enabled;
-	if (output.enabled){
-		this->dispConnBtn->Text = "Disconnect from FCS";
-	} else {
-		this->dispConnBtn->Text = "Connect to FCS";
+	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
+		output.enabled = !output.enabled;
+		if (output.enabled){
+			this->dispConnBtn->Text = "Disconnect from FCS";
+		} else {
+			this->dispConnBtn->Text = "Connect to FCS";
+		}
 	}
-}
+	private: System::Void comboBox1_DropDown(System::Object^  sender, System::EventArgs^  e) {
+		AcquireSRWLockShared(&comLock);
+		portSelector->Items->Clear();
+		for each (String^ portname in SerialPortData::serialPorts){
+			if (portname != nullptr) {
+				portSelector->Items->Add(portname);
+			}
+		}
+		ReleaseSRWLockShared(&comLock);
+	}
+
+	private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+		AcquireSRWLockExclusive(&dispLock);
+		output.dispEnabled = this->checkBox1->Checked;
+		ReleaseSRWLockExclusive(&dispLock);
+	}
 };
 }
