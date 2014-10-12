@@ -402,6 +402,8 @@ DWORD WINAPI SendSerial(LPVOID lpParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
+	output.dispEnabled = true;
+
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
