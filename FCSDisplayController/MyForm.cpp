@@ -340,9 +340,11 @@ DWORD WINAPI SendSerial(LPVOID lpParam)
 			AcquireSRWLockExclusive(&comLock);
 			SerialPortData::serialPorts->Clear();
 			for each (String^ portname in serialPorts){
-				if (portname != nullptr) {
+				if (SerialPortData::chosenPort != nullptr && SerialPortData::chosenPort->Equals(portname)){
+					SerialPortData::search = false;
+				} else if (portname != nullptr) {
 					SerialPortData::serialPorts->Add(portname);
-				}
+				} 
 			}
 			ReleaseSRWLockExclusive(&comLock);
 			Sleep(50);

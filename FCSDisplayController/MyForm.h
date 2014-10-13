@@ -491,12 +491,11 @@ namespace FCSDisplayController {
 		if (!SerialPortData::search) {
 			this->dispStatus->Text = "Displays Connected";
 			this->dispStatus->BackColor = Color::YellowGreen;
+			this->ardConnButton->Text = "Disconnect from displays";
+			this->portSelector->Enabled = false;
 		} else {
-			if (!this->portSelector->Enabled){
-				this->portSelector->Enabled = true;
-				this->ardConnButton->Text = "Connect to displays";
-				this->portSelector->SelectedIndex = -1;
-			}
+			this->portSelector->Enabled = true;
+			this->ardConnButton->Text = "Connect to displays";
 			this->dispStatus->Text = "Displays Not Connected";
 			this->dispStatus->BackColor = Color::DarkSalmon;
 		}
