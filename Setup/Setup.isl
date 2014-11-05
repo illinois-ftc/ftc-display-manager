@@ -265,6 +265,7 @@
 		<row><td>NewBinary18</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\InstallStateMenu.ico</td></row>
 		<row><td>NewBinary19</td><td/><td>&lt;ISProductFolder&gt;\redist\Language independent\i386\SerialNumCAHelper.dll</td></row>
 		<row><td>NewBinary2</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\New.ibd</td></row>
+		<row><td>NewBinary20</td><td/><td>C:\Users\Jacob\Documents\Visual Studio 2013\Projects\FCSDisplayController\Dist\Drivers\dpinst-x86.exe</td></row>
 		<row><td>NewBinary3</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\Up.ibd</td></row>
 		<row><td>NewBinary4</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\WarningIcon.ibd</td></row>
 		<row><td>NewBinary5</td><td/><td>&lt;ISProductFolder&gt;\Support\Themes\InstallShield Blue Theme\welcome.jpg</td></row>
@@ -344,6 +345,9 @@
 		<row><td>FCSDisplayController.Primary_Output</td><td>{F3302479-EFB7-4F27-B22A-3F46B9AB5414}</td><td>INSTALLDIR</td><td>2</td><td/><td>fcsdisplaycontroller.primary</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td>{51CC11FD-547B-4E28-8F5B-35D2E51F6272}</td><td>SystemFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{9BDB2C96-EB4B-4986-98F3-303E232D7B4D}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{05CB2389-2EA6-4353-84B8-CC4A031E7BED}</td><td>DRIVERS</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dpinst_amd64.exe</td><td>{52C438E0-87D8-4B31-9D9C-738E448178E7}</td><td>DRIVERS</td><td>2</td><td/><td>dpinst_amd64.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dpinst_x86.exe</td><td>{D6B7B5D6-3ED7-4970-A44B-68D2E8C4FE6E}</td><td>DRIVERS</td><td>2</td><td/><td>dpinst_x86.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1064,6 +1068,8 @@
 		<col def="S0">Target</col>
 		<col def="I4">ExtendedType</col>
 		<col def="S255">ISComments</col>
+		<row><td>DriversAMD64</td><td>3154</td><td>dpinst_amd64.exe</td><td>/S</td><td/><td/></row>
+		<row><td>DriversX86</td><td>3154</td><td>dpinst_x86.exe</td><td>/S</td><td/><td/></row>
 		<row><td>ISPreventDowngrade</td><td>19</td><td/><td>[IS_PREVENT_DOWNGRADE_EXIT]</td><td/><td>Exits install when a newer version of this product is found</td></row>
 		<row><td>ISPrint</td><td>1</td><td>SetAllUsers.dll</td><td>PrintScrollableText</td><td/><td>Prints the contents of a ScrollableText control on a dialog.</td></row>
 		<row><td>ISRunSetupTypeAddLocalEvent</td><td>1</td><td>ISExpHlp.dll</td><td>RunSetupTypeAddLocalEvent</td><td/><td>Run the AddLocal events associated with the Next button on the Setup Type dialog.</td></row>
@@ -1072,7 +1078,6 @@
 		<row><td>ISSelfRegisterFinalize</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFinalize</td><td/><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISUnSelfRegisterFiles</td><td/><td/></row>
 		<row><td>LaunchProgramFileFromSetupCompleteSuccess</td><td>1</td><td>NewBinary19</td><td>LaunchProgram</td><td/><td/></row>
-		<row><td>NewCustomAction1</td><td>1026</td><td/><td/><td/><td/></row>
 		<row><td>SetARPINSTALLLOCATION</td><td>51</td><td>ARPINSTALLLOCATION</td><td>[INSTALLDIR]</td><td/><td/></row>
 		<row><td>SetAllUsersProfileNT</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%SystemRoot]\Profiles\All Users</td><td/><td/></row>
 		<row><td>ShowMsiLog</td><td>226</td><td>SystemFolder</td><td>[SystemFolder]notepad.exe "[MsiLogFileLocation]"</td><td/><td>Shows Property-driven MSI Log</td></row>
@@ -1142,6 +1147,7 @@
 		<row><td>CommonFiles64Folder</td><td>TARGETDIR</td><td>.:Common64</td><td/><td>0</td><td/></row>
 		<row><td>CommonFilesFolder</td><td>TARGETDIR</td><td>.:Common</td><td/><td>0</td><td/></row>
 		<row><td>DATABASEDIR</td><td>ISYourDataBaseDir</td><td>.</td><td/><td>0</td><td/></row>
+		<row><td>DRIVERS</td><td>INSTALLDIR</td><td>Drivers</td><td/><td>0</td><td/></row>
 		<row><td>DesktopFolder</td><td>TARGETDIR</td><td>.:Desktop</td><td/><td>3</td><td/></row>
 		<row><td>FCS_DISPLAY_MANAGER</td><td>ILLINOIS_FTC</td><td>FCSDIS~1|FCS Display Manager</td><td/><td>0</td><td/></row>
 		<row><td>FTC_DISPLAY_CONTROLLER</td><td>ILLINOIS_FTC</td><td>FTCDIS~1|FTC Display Controller</td><td/><td>0</td><td/></row>
@@ -1873,6 +1879,9 @@
 		<row><td>AlwaysInstall</td><td>FCSDisplayController.Primary_Output</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>AlwaysInstall</td><td>dpinst_amd64.exe</td></row>
+		<row><td>AlwaysInstall</td><td>dpinst_x86.exe</td></row>
 	</table>
 
 	<table name="File">
@@ -1887,6 +1896,10 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
+		<row><td>arduino.cat</td><td>ISX_DEFAULTCOMPONENT2</td><td>arduino.cat</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Jacob\Documents\Visual Studio 2013\Projects\FCSDisplayController\Dist\Drivers\arduino.cat</td><td>1</td><td/></row>
+		<row><td>arduino.inf</td><td>ISX_DEFAULTCOMPONENT2</td><td>arduino.inf</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Jacob\Documents\Visual Studio 2013\Projects\FCSDisplayController\Dist\Drivers\arduino.inf</td><td>1</td><td/></row>
+		<row><td>dpinst_amd64.exe</td><td>dpinst_amd64.exe</td><td>DPINST~1.EXE|dpinst-amd64.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Jacob\Documents\Visual Studio 2013\Projects\FCSDisplayController\Dist\Drivers\dpinst-amd64.exe</td><td>1</td><td/></row>
+		<row><td>dpinst_x86.exe</td><td>dpinst_x86.exe</td><td>DPINST~1.EXE|dpinst-x86.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Jacob\Documents\Visual Studio 2013\Projects\FCSDisplayController\Dist\Drivers\dpinst-x86.exe</td><td>1</td><td/></row>
 		<row><td>fcsdisplaycontroller.primary</td><td>FCSDisplayController.Primary_Output</td><td>FCSDisplayController.Primary Output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;FCSDisplayController&gt;|Built</td><td>3</td><td/></row>
 	</table>
 
@@ -2034,6 +2047,9 @@
 		<row><td>FCSDisplayController.Primary_Output</td><td/><td/><td>_99DAEC69_66FE_4CA4_8E69_F3FD851CD19A_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_372AF3DE_D587_4439_AB7C_504DFA39FAA9_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_D3E4C001_AC27_4663_9558_F2E82F1B70ED_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_E5A301E3_5F2A_4FD3_A355_EFDFB7513CCD_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dpinst_amd64.exe</td><td/><td/><td>_D42FAD83_FC73_4645_B220_B3E6C5E19369_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dpinst_x86.exe</td><td/><td/><td>_3604BBBB_AA43_4CF4_B033_549733A85C3A_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2619,6 +2635,8 @@
 		<col def="I2">ISSetupLocation</col>
 		<col def="S255">ISReleaseFlags</col>
 		<row><td>_203FD8A0_2755_46FB_BCC9_06A9286164F0_</td><td>Microsoft .NET Framework 4.5 Full.prq</td><td/><td>1</td><td/></row>
+		<row><td>_303E9711_1865_49D0_B8EB_4AF9FC1D3908_</td><td>Microsoft Visual C++ 2012 Redistributable Package (x64).prq</td><td/><td>1</td><td/></row>
+		<row><td>_547CE85C_5204_444B_B0CC_85EEF1C37328_</td><td>Microsoft Visual C++ 2012 Redistributable Package (x86).prq</td><td/><td>1</td><td/></row>
 	</table>
 
 	<table name="ISSetupType">
@@ -3904,6 +3922,8 @@
 		<row><td>CreateFolders</td><td/><td>3700</td><td>CreateFolders</td><td/></row>
 		<row><td>CreateShortcuts</td><td/><td>4500</td><td>CreateShortcuts</td><td/></row>
 		<row><td>DeleteServices</td><td>VersionNT</td><td>2000</td><td>DeleteServices</td><td/></row>
+		<row><td>DriversAMD64</td><td>Not Installed</td><td>6408</td><td/><td/></row>
+		<row><td>DriversX86</td><td>Not Installed</td><td>6406</td><td/><td/></row>
 		<row><td>DuplicateFiles</td><td/><td>4210</td><td>DuplicateFiles</td><td/></row>
 		<row><td>FileCost</td><td/><td>900</td><td>FileCost</td><td/></row>
 		<row><td>FindRelatedProducts</td><td>NOT ISSETUPDRIVEN</td><td>420</td><td>FindRelatedProducts</td><td/></row>
@@ -3926,7 +3946,6 @@
 		<row><td>MsiConfigureServices</td><td>VersionMsi &gt;= "5.00"</td><td>5850</td><td>MSI5 MsiConfigureServices</td><td/></row>
 		<row><td>MsiPublishAssemblies</td><td/><td>6250</td><td>MsiPublishAssemblies</td><td/></row>
 		<row><td>MsiUnpublishAssemblies</td><td/><td>1750</td><td>MsiUnpublishAssemblies</td><td/></row>
-		<row><td>NewCustomAction1</td><td>Not Installed</td><td>6405</td><td/><td/></row>
 		<row><td>PatchFiles</td><td/><td>4090</td><td>PatchFiles</td><td/></row>
 		<row><td>ProcessComponents</td><td/><td>1600</td><td>ProcessComponents</td><td/></row>
 		<row><td>PublishComponents</td><td/><td>6200</td><td>PublishComponents</td><td/></row>
@@ -4379,7 +4398,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGRAMFILETOLAUNCHATEND</td><td>[INSTALLDIR]FCSDisplayController.Primary Output</td><td/></row>
 		<row><td>ProductCode</td><td>{7388B0EE-18CA-4997-AD64-993E9467B14D}</td><td/></row>
 		<row><td>ProductName</td><td>FCS Display Manager</td><td/></row>
-		<row><td>ProductVersion</td><td>1.0</td><td/></row>
+		<row><td>ProductVersion</td><td>1.0.1</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>
