@@ -302,6 +302,7 @@ namespace FCSDisplayController {
 			this->brightnessSlider->Name = L"brightnessSlider";
 			this->brightnessSlider->Size = System::Drawing::Size(226, 45);
 			this->brightnessSlider->TabIndex = 16;
+			this->brightnessSlider->Value = 15;
 			this->brightnessSlider->Scroll += gcnew System::EventHandler(this, &MyForm::brightnessSlider_Scroll);
 			// 
 			// label5
@@ -320,9 +321,9 @@ namespace FCSDisplayController {
 			this->brightnessLabel->Location = System::Drawing::Point(147, 141);
 			this->brightnessLabel->MinimumSize = System::Drawing::Size(13, 13);
 			this->brightnessLabel->Name = L"brightnessLabel";
-			this->brightnessLabel->Size = System::Drawing::Size(21, 13);
+			this->brightnessLabel->Size = System::Drawing::Size(33, 13);
 			this->brightnessLabel->TabIndex = 18;
-			this->brightnessLabel->Text = L"0%";
+			this->brightnessLabel->Text = L"100%";
 			this->brightnessLabel->Click += gcnew System::EventHandler(this, &MyForm::label6_Click);
 			// 
 			// timer1
@@ -443,6 +444,7 @@ namespace FCSDisplayController {
 			this->blue2Disp->Enabled = false;
 			this->ardConnButton->Text = "Disconnect from displays";
 		} else {
+			SerialPortData::chosenPort = "";
 			this->portSelector->Enabled = true;
 			this->red1Disp->Enabled = true;
 			this->red2Disp->Enabled = true;
