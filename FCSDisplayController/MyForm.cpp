@@ -51,6 +51,7 @@ BOOL CALLBACK on_enumwindow_cb(HWND hwndWindow, LPARAM lParam) {
 
 		EnumChildWindows(samo, (WNDENUMPROC)on_enumchildwindow_cb, 0);
 		mode = PRE_AUTO;
+		return false;
 	}
 
 	return true;
@@ -405,7 +406,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
 	output.dispEnabled = true;
-
+	output.brightness = 15;
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
